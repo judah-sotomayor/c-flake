@@ -22,14 +22,17 @@
             src = ulfius;
             outputs = ["out"];
             buildInputs = with pkgs;[
-              jansson
               curl
-              libmicrohttpd
-              gnutls
-              orcania
-              yder
               pkg-config
               check
+            ];
+            propagatedBuildInputs = with pkgs;[
+              gnutls
+              jansson
+              libmicrohttpd
+              orcania
+              yder
+              zlib
             ];
 
             installPhase = ''
