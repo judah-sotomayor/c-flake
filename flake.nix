@@ -17,7 +17,7 @@
     in
       {
         packages = forAllSystems (pkgs: system: {
-          default = pkgs.stdenv.mkDerivation {
+          ulfius = pkgs.stdenv.mkDerivation {
             name = "ulfius";
             src = ulfius;
             outputs = ["out"];
