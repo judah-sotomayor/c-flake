@@ -1,46 +1,18 @@
 {
-  description = "ulfius Web Framework";
+  description = "A mix of packages that are not in nixpkgs, or that I wish to modify in some way.";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    ulfius = {
-      url = "git+https://github.com/babelouest/ulfius";
-      flake = false;
-    };
   };
 
-  outputs = {self, nixpkgs, ulfius} :
+  outputs = {self, nixpkgs} :
     let
       forAllSystems = function:
         nixpkgs.lib.genAttrs [
           "x86_64-linux"
+          "aarch64-darwin"
         ] (system: function nixpkgs.legacyPackages.${system} system);
     in
       {
-        packages = forAllSystems (pkgs: system: {
-          ulfius = pkgs.stdenv.mkDerivation {
-            name = "ulfius";
-            src = ulfius;
-            outputs = ["out"];
-            buildInputs = with pkgs;[
-              curl
-              pkg-config
-              check
-            ];
-            propagatedBuildInputs = with pkgs;[
-              gnutls
-              jansson
-              libmicrohttpd
-              orcania
-              yder
-              zlib
-            ];
-
-            installPhase = ''
-              mkdir -p $out/lib
-              make DESTDIR=$out install;
-            '';
-            checkPhase = "make check";
-          };
-        });
+        packages = forAllSystems (pkgs: system: import ./pkgs pkgs);
       };
 }
